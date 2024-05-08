@@ -1,0 +1,46 @@
+% Given data
+data = [49.3188; 91.1594; 146.0145; 182.5652; 215.3913; 246.6521; 270.3913; 297.3768; 322.2753; 338.2174; 358.5362; 374.2463; 388.6811; 401.6377; 415.5507; 430.1594; 441.8844; 452.3043; 469.9565; 475.6811; 485.8844; 496.5942; 505.0434; 514.2463; 521.5797; 528.0145; 535.9565; 544.6232; 551.6521; 558.3478; 566.6811; 573.8985; 574.8116; 582.4782; 591.4203; 591.9425; 597.4492; 605.6377; 609.3333; 618.3333; 619.9275; 627.4927; 627.8406; 634.4637; 633.5507; 639.0434; 645.1159; 646.2174; 647.6232; 652.0725; 657.8116; 655.3768; 658.4203; 663.4348; 667.4927; 669.9275; 670.2029; 673.8695; 674.3188; 674.4348; 679.2319; 683.0725; 684.5072; 685.6232; 690.5652; 688.9136; 693.0869; 693.3478; 699.7536; 699.0725; 703.6811; 706.8695; 704.1449; 711.1594; 714.3623; 715.9717; 717.6087; 718.4927; 722.9137; 723.6811; 729.1014; 733.5942; 734.6666; 738.3043; 741.3478; 744.1449; 743.3623; 747.3188; 752.1304];
+x = (1:length(data)) * 50;
+degree = 3; % Degree of polynomial
+
+% Fit a polynomial (3rd order polynomial) to the data
+p = polyfit(x, data, degree);
+
+% Generate y values for the best fit polynomial
+y_fit = polyval(p, x);
+
+% Calculate residuals
+residuals = data' - y_fit;
+
+% Calculate standard deviation of the residuals
+standard_deviation = std(residuals);
+
+% Calculate mean squared error (MSE)
+mse = sqrt(mean(residuals.^2));
+
+% Calculate R-squared (coefficient of determination)
+y_mean = mean(data);
+ss_total = sum((data - y_mean).^2);
+ss_residual = sum(residuals.^2);
+r_squared = 1 - (ss_residual / ss_total);
+
+% Plot the data and the best fit polynomial
+plot(x, data, 'o', x, y_fit, '-')
+xlabel('X')
+ylabel('Data')
+title(['Best Fit Polynomial [170 nW] (Degree ' num2str(degree) ')'])
+legend('Data', 'Best Fit Polynomial')
+
+
+
+% Construct the polynomial function
+syms x_var;
+poly_function = 0;
+for i = 1:length(p)
+    poly_function = poly_function + p(i) * x_var^(degree - i + 1);
+end
+
+disp(['Polynomial function: ' char(poly_function)]);
+disp(['Standard Deviation: ' num2str(standard_deviation)]);
+disp(['RMSE: ' num2str(mse)]);
+disp(['R^2: ' num2str(r_squared)]);
