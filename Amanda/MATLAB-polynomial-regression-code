@@ -1,0 +1,44 @@
+% Given data
+data = [243.2463; 328.7101; 413.7391; 457.9424; 492.5072; 529.0434; 552.6956; 578.3043; 600.7536; 613.7976; 630.2898; 642.3912; 654.5651; 662.1738; 672.6956; 687.6086; 694.5362; 701.5651; 710.1883; 718.0289; 723.2463; 731.7536; 734.8847; 741.4492; 747.2753; 750.4492; 753.3623; 755.4637; 758.6086; 763.7536; 767.1738; 770.9275; 773.5362; 775.2029; 779.4637; 785.4347; 787.8695; 792.4637; 795.5507; 798.3333; 801.3912; 804.9709; 807.1014; 810.4492; 810.2753; 815.5941; 816.1593; 821.4637; 825.5796; 827.9999; 829.1159; 833.3767; 833.5217; 834.8558; 838.0579; 840.2898; 842.8268; 843.3043; 844.7536; 845.9709];
+x = (1:length(data)) * 50;
+degree = 1; % Degree of polynomial
+
+% Fit a polynomial (3rd order polynomial) to the data
+p = polyfit(x, data, degree);
+
+% Generate y values for the best fit polynomial
+y_fit = polyval(p, x);
+
+% Calculate residuals
+residuals = data' - y_fit;
+
+% Calculate standard deviation of the residuals
+standard_deviation = std(residuals);
+
+% Calculate mean squared error (MSE)
+mse = sqrt(mean(residuals.^2));
+
+% Calculate R-squared (coefficient of determination)
+y_mean = mean(data);
+ss_total = sum((data - y_mean).^2);
+ss_residual = sum(residuals.^2);
+r_squared = 1 - (ss_residual / ss_total);
+
+% Plot the data and the best fit polynomial
+plot(x, data, 'o', x, y_fit, '-')
+xlabel('X')
+ylabel('Data')
+title(['Best Fit Polynomial [92nW] (Degree ' num2str(degree) ')'])
+legend('Data', 'Best Fit Polynomial')
+
+% Construct the polynomial function
+syms x_var;
+poly_function = 0;
+for i = 1:length(p)
+    poly_function = poly_function + p(i) * x_var^(degree - i + 1);
+end
+
+disp(['Polynomial function: ' char(poly_function)]);
+disp(['Standard Deviation: ' num2str(standard_deviation)]);
+disp(['RMSE: ' num2str(mse)]);
+disp(['R^2: ' num2str(r_squared)]);
